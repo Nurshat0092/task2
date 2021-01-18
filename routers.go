@@ -1,7 +1,14 @@
 package main
 
-import "net/http"
+import (
+	"net/http"
+)
 
-func routes() http.Handler {
-	mux := pat.New()
+func routes() *http.ServeMux {
+	mux := &http.ServeMux{}
+
+	mux.HandleFunc("/get", getHandler)
+	mux.HandleFunc("/load", loadHandler)
+
+	return mux
 }
