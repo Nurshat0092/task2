@@ -3,15 +3,16 @@ package main
 import (
 	"encoding/json"
 	"net/http"
+	"task2/utils"
 )
 
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
-		form := newForm(r.URL.Query())
-		form.required("word")
-		if !form.valid() {
-			jsonResponse(w, form.errors, http.StatusBadRequest)
+		form := utils.NewForm(r.URL.Query())
+		form.Required("word")
+		if !form.Valid() {
+			jsonResponse(w, form.Errors, http.StatusBadRequest)
 			return
 		}
 		word := form.Get("word")

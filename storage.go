@@ -15,7 +15,7 @@ var (
 func getAnnagrams(word string) []string {
 	lock.RLock()
 	defer lock.RUnlock()
-	hash := getHash(word)
+	hash := getWordHash(word)
 	val, ok := vocab[hash]
 	if !ok {
 		return nil
@@ -32,13 +32,13 @@ func loadAnnagrams(words []string) {
 		}
 		checker[w] = struct{}{}
 		lowercaseWord := strings.ToLower(w)
-		hash := getHash(lowercaseWord)
+		hash := getWordHash(lowercaseWord)
 		// fmt.Printf("Word: %s, Hash: %s\n", w, hash)
 		vocab[hash] = append(vocab[hash], w)
 	}
 }
 
-func getHash(word string) string {
+func getWordHash(word string) string {
 	arr := []rune(word)
 	// fmt.Printf("До хэша: %v\n", arr)
 	sort.SliceStable(arr, func(i, j int) bool { return arr[i] < arr[j] })

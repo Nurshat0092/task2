@@ -1,35 +1,39 @@
-package main
+package utils
 
 import (
 	"net/url"
 	"strings"
 )
 
-type form struct {
+// Form ..
+type Form struct {
 	url.Values
-	errors errors
+	Errors errors
 }
 
 type errors map[string][]string
 
-func newForm(data url.Values) *form {
-	return &form{
+// NewForm creates new form
+func NewForm(data url.Values) *Form {
+	return &Form{
 		data,
 		errors(map[string][]string{}),
 	}
 }
 
-func (f *form) required(fields ...string) {
+// Required ..
+func (f *Form) Required(fields ...string) {
 	for _, field := range fields {
 		value := f.Get(field)
 		if strings.TrimSpace(value) == "" {
-			f.errors.add(field, "This field cannot be blank")
+			f.Errors.add(field, "This field cannot be blank")
 		}
 	}
 }
 
-func (f *form) valid() bool {
-	return len(f.errors) == 0
+// Valid ..
+func (f *Form) Valid() bool {
+	return len(f.Errors) == 0
 }
 
 func (e errors) add(field, message string) {
