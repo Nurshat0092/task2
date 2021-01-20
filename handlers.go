@@ -3,9 +3,12 @@ package main
 import (
 	"encoding/json"
 	"net/http"
-	"task2/utils"
+
+	"github.com/Nurshat0092/task2/storage"
+	"github.com/Nurshat0092/task2/utils"
 )
 
+// endPoint to get annagram
 func getHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "GET":
@@ -17,12 +20,13 @@ func getHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		word := form.Get("word")
 
-		anns := getAnnagrams(word)
+		anns := storage.GetAnnagrams(word)
 
 		jsonResponse(w, anns, http.StatusOK)
 	}
 }
 
+// endPoint to load annagrams
 func loadHandler(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case "POST":
@@ -32,10 +36,11 @@ func loadHandler(w http.ResponseWriter, r *http.Request) {
 			jsonResponse(w, "Invalid json structure", http.StatusBadRequest)
 			return
 		}
-		loadAnnagrams(words)
+		storage.LoadAnnagrams(words)
 	}
 }
 
+// jsonResponse helper function
 func jsonResponse(w http.ResponseWriter, d interface{}, c int) {
 	w.Header().Set("Content-type", "application/json")
 	w.WriteHeader(c)
